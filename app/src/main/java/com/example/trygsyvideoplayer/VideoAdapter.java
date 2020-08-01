@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,11 +29,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView videoImage;
+        TextView videoText;
 
         public ViewHolder (View view)
         {
             super(view);
             videoImage = (ImageView) view.findViewById(R.id.video_img);
+            videoText = (TextView) view.findViewById(R.id.video_text);
         }
 
     }
@@ -83,6 +86,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>{
         Glide.with(holder.videoImage)
                 .load(picUrl)
                 .into(holder.videoImage);
+
+        holder.videoText.setText(video.author);
 
         if (onitemClick != null) {
             holder.videoImage.setOnClickListener(new View.OnClickListener() {
