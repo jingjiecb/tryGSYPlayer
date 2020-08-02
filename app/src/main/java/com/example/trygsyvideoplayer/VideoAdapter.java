@@ -1,5 +1,6 @@
 package com.example.trygsyvideoplayer;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.StrictMode;
@@ -8,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.trygsyvideoplayer.Pojo.Video;
 
 import java.io.IOException;
@@ -26,11 +29,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView videoImage;
+        TextView videoText;
 
         public ViewHolder (View view)
         {
             super(view);
             videoImage = (ImageView) view.findViewById(R.id.video_img);
+            videoText = (TextView) view.findViewById(R.id.video_text);
         }
 
     }
@@ -56,21 +61,39 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>{
 
         Video video = mVideoList.get(position);
         URL picUrl = null;
+
+//        try {
+//            String[] tmp = video.pictureUrl.split(":");
+//            picUrl = new URL("https:"+tmp[1]);
+////            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+////            holder.videoImage.setImageBitmap(pngBM);
+//
+//            Glide.with(new View(null))
+//                    .load(picUrl)
+//                    .into(holder.videoImage);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        String[] tmp = video.pictureUrl.split(":");
         try {
-            String[] tmp = video.pictureUrl.split(":");
             picUrl = new URL("https:"+tmp[1]);
-            Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-            holder.videoImage.setImageBitmap(pngBM);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        Glide.with(holder.videoImage)
+                .load(picUrl)
+                .into(holder.videoImage);
+
+        holder.videoText.setText(video.author);
+
         if (onitemClick != null) {
             holder.videoImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //在TextView的地方进行监听点击事件，并且实现接口
+                    //在imageView的地方进行监听点击事件，并且实现接口
                     onitemClick.onItemClick(video.videoUrl);
                 }
             });
